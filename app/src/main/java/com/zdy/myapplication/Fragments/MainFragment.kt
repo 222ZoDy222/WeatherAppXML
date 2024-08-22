@@ -1,10 +1,14 @@
 package com.zdy.myapplication.Fragments
 
+import android.Manifest
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -15,6 +19,8 @@ import com.zdy.myapplication.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
 
+
+    private lateinit var pLauncher: ActivityResultLauncher<String>
     private lateinit var binding: FragmentMainBinding
 
 
@@ -31,7 +37,8 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        RequestWeather()
+        checkPermission()
+        //RequestWeather()
     }
 
 
@@ -48,7 +55,7 @@ class MainFragment : Fragment() {
         val stringRequest = StringRequest(Request.Method.GET,
             url,{ response ->
 
-                binding.AnswerText.text = response
+                //binding.AnswerText.text = response
 
             },{error->
 
@@ -57,6 +64,22 @@ class MainFragment : Fragment() {
 
         queue.add(stringRequest)
 
+    }
+
+
+    private fun permissionListener(){
+        pLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ){permissionGranted ->
+            Toast.makeText(activity,"Permission is $permissionGranted",Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun checkPermission(){
+        if(!isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)){
+            permissionListener()
+            pLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
     }
 
     companion object {
