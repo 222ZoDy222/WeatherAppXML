@@ -1,7 +1,9 @@
 package com.zdy.myapplication.Fragments
 
 import android.Manifest
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +11,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.FragmentActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.material.tabs.TabLayoutMediator
+import com.zdy.myapplication.Adapters.ViewPagerAdapter
 import com.zdy.myapplication.R
+import com.zdy.myapplication.WebManager.WebManager
+import com.zdy.myapplication.WebManager.WebParser
 import com.zdy.myapplication.databinding.ActivityMainBinding
 import com.zdy.myapplication.databinding.FragmentMainBinding
 
@@ -23,8 +30,6 @@ class MainFragment : Fragment() {
     private lateinit var pLauncher: ActivityResultLauncher<String>
     private lateinit var binding: FragmentMainBinding
 
-
-    private val API_KEY = "c541682d629944e7b45153031242108"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,34 +43,43 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkPermission()
-        //RequestWeather()
+
+        InitAdapters()
+
+        RequestWeather()
     }
 
 
 
     private fun RequestWeather(){
-        getResult("Penza")
+        WebManager.Instance()?.GetWeather("Penza",activity as Context){result->
+            Log.i("RequestWebManagerLog", result ?: "null")
+            result?.let {
+                var day = WebParser.GetWeather(result)
+                var t = 1
+            }
+
+        }
     }
 
-    private fun getResult(name: String){
 
-        val url = "https://api.weatherapi.com/v1/current.json?key=$API_KEY&q=$name&aqi=no"
-        val queue = Volley.newRequestQueue(this.context)
 
-        val stringRequest = StringRequest(Request.Method.GET,
-            url,{ response ->
+    private val fragmentList = listOf(
+        HoursFragment.newInstance(),
+        DaysFragment.newInstance()
+    )
+    private val tabList = listOf(
+        "Hours",
+        "Days"
+    )
+    private fun InitAdapters() = with(binding){
+        viewPager.adapter = ViewPagerAdapter(activity as FragmentActivity,fragmentList)
+        TabLayoutMediator(tabLayout,viewPager){tab,pos->
 
-                //binding.AnswerText.text = response
+            tab.text = tabList[pos]
 
-            },{error->
-
-                var t = 0
-            })
-
-        queue.add(stringRequest)
-
+        }.attach()
     }
-
 
     private fun permissionListener(){
         pLauncher = registerForActivityResult(

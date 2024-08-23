@@ -2,13 +2,14 @@ package com.zdy.myapplication
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zdy.myapplication.DataClasses.DayWeather
 
 class MainViewModel : ViewModel() {
 
     // Header Temperature
-    val selectedTemperature = MutableLiveData<String>()
+    val selectedTemperature = MutableLiveData<DayWeather>()
 
     // List of the day temperature
-    val temperatureList = MutableLiveData<String>()
+    val temperatureList = MutableLiveData<List<DayWeather>>()
 
 }
