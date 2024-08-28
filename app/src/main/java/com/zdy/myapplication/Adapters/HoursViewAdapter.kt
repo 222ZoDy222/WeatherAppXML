@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.zdy.myapplication.DataClasses.DayWeather
 import com.zdy.myapplication.databinding.ItemHoursListBinding
 
@@ -18,8 +19,10 @@ class HoursViewAdapter : ListAdapter<DayWeather, HoursViewAdapter.HoursViewHolde
     {
 
         fun Init(dayWeather: DayWeather) = with(binding){
-            timeText.text = dayWeather.time
+            timeText.text = dayWeather.time.split(" ")[1]
             temperatureText.text = dayWeather.currentTemp
+            Picasso.get().load("https:" + dayWeather.imageURL).into(imageView)
+
         }
 
     }

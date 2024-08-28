@@ -12,15 +12,14 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
-import com.android.volley.Request
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
+import com.squareup.picasso.Picasso
 import com.zdy.myapplication.Adapters.ViewPagerAdapter
-import com.zdy.myapplication.R
+import com.zdy.myapplication.DataClasses.DayWeather
+import com.zdy.myapplication.MainViewModel
 import com.zdy.myapplication.WebManager.WebManager
 import com.zdy.myapplication.WebManager.WebParser
-import com.zdy.myapplication.databinding.ActivityMainBinding
 import com.zdy.myapplication.databinding.FragmentMainBinding
 
 
@@ -30,6 +29,7 @@ class MainFragment : Fragment() {
     private lateinit var pLauncher: ActivityResultLauncher<String>
     private lateinit var binding: FragmentMainBinding
 
+    private val weatherModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +45,8 @@ class MainFragment : Fragment() {
         checkPermission()
 
         InitAdapters()
-
+        AddListeners()
+        UpdateCurrentWeather(null)
         RequestWeather()
     }
 
@@ -55,13 +56,42 @@ class MainFragment : Fragment() {
         WebManager.Instance()?.GetWeather("Penza",activity as Context){result->
             Log.i("RequestWebManagerLog", result ?: "null")
             result?.let {
-                var day = WebParser.GetWeather(result)
-                var t = 1
+
+                var resultParse = WebParser.GetWeather(result)
+
+                weatherModel.temperatureCurrent.value = resultParse.currentDay
+                weatherModel.temperatureList.value = resultParse.daysWeather
+                weatherModel.selectedTemperature.value = weatherModel.temperatureCurrent.value
             }
 
         }
     }
 
+    private fun AddListeners(){
+        weatherModel.selectedTemperature.observe(viewLifecycleOwner){
+            UpdateCurrentWeather(it)
+        }
+    }
+
+    private fun UpdateCurrentWeather(weather: DayWeather?) = with(binding){
+
+        if(weather != null){
+            SelectedTemperatureCard.visibility = View.VISIBLE
+
+            selectedCity.text = weather.city
+            selectedTemperature.text = weather.currentTemp
+            selectedCondition.text = weather.condition
+            selectedDate.text = weather.time
+            selectedMinMax.text = "${weather.minTemp}/${weather.maxTemp}"
+            Picasso.get().load("https:" + weather.imageURL).into(conditionImage)
+
+
+
+        } else{
+            SelectedTemperatureCard.visibility = View.INVISIBLE
+        }
+
+    }
 
 
     private val fragmentList = listOf(

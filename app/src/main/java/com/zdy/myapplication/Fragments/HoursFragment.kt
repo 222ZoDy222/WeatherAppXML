@@ -5,10 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zdy.myapplication.Adapters.HoursViewAdapter
 import com.zdy.myapplication.DataClasses.DayWeather
+import com.zdy.myapplication.MainViewModel
 import com.zdy.myapplication.R
+import com.zdy.myapplication.WebManager.WebParser
 import com.zdy.myapplication.databinding.FragmentHoursBinding
 
 
@@ -18,6 +22,9 @@ class HoursFragment : Fragment() {
     private lateinit var binding : FragmentHoursBinding
 
     private lateinit var weatherAdapter: HoursViewAdapter
+
+    private val model : MainViewModel by activityViewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,10 +41,19 @@ class HoursFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRC()
 
+        initRC()
+        AddListener()
     }
 
+    private fun AddListener(){
+        model.selectedTemperature.observe(viewLifecycleOwner){
+
+            val hours = WebParser.GetHours(it)
+            weatherAdapter.submitList(hours)
+
+        }
+    }
     private fun initRC() = with(binding){
 
 
@@ -45,13 +61,7 @@ class HoursFragment : Fragment() {
         rcView.adapter = weatherAdapter
         rcView.layoutManager = LinearLayoutManager(activity)
 
-        val list = listOf<DayWeather>(
-            DayWeather(time="22:30", currentTemp = "24", city = "", condition = "", imageURL = "", minTemp = "", maxTemp = "", hours = ""),
-            DayWeather(time="23:30", currentTemp = "25", city = "", condition = "", imageURL = "", minTemp = "", maxTemp = "", hours = ""),
-            DayWeather(time="00:30", currentTemp = "26", city = "", condition = "", imageURL = "", minTemp = "", maxTemp = "", hours = ""),
-        )
 
-        weatherAdapter.submitList(list)
 
     }
 

@@ -12,4 +12,7 @@ class MainViewModel : ViewModel() {
     // List of the day temperature
     val temperatureList = MutableLiveData<List<DayWeather>>()
 
+    // Current Day Temperature
+    val temperatureCurrent = MutableLiveData<DayWeather>()
+
 }

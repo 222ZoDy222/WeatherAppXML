@@ -52,27 +52,12 @@
                 android:fontFamily="@font/aldrich"
                 android:text="22.08.2024"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/selectedTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/aldrich"
-                android:text="22:10"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/selectedDate"
-                app:layout_constraintStart_toStartOf="@+id/selectedDate"
-                app:layout_constraintTop_toBottomOf="@+id/selectedDate"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
@@ -97,7 +82,7 @@
                 android:fontFamily="@font/aldrich"
                 android:text="sunny"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/selectedTemperature"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/selectedTemperature"
@@ -105,17 +90,27 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/selectedCondition4"
+                android:id="@+id/selectedMinMax"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/aldrich"
                 android:text="24/-1"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/selectedCondition"
                 app:layout_constraintStart_toStartOf="@+id/selectedCondition"
                 app:layout_constraintTop_toBottomOf="@+id/selectedCondition" />
+
+            <ImageView
+                android:id="@+id/conditionImage"
+                android:layout_width="60dp"
+                android:layout_height="57dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/selectedCondition"
+                app:layout_constraintEnd_toEndOf="@+id/selectedCondition"
+                app:layout_constraintStart_toStartOf="@+id/selectedCondition"
+                tools:src="@tools:sample/avatars" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
