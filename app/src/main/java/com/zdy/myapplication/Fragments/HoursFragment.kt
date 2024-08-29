@@ -14,6 +14,7 @@ import com.zdy.myapplication.MainViewModel
 import com.zdy.myapplication.R
 import com.zdy.myapplication.WebManager.WebParser
 import com.zdy.myapplication.databinding.FragmentHoursBinding
+import java.util.Calendar
 
 
 class HoursFragment : Fragment() {
@@ -51,15 +52,21 @@ class HoursFragment : Fragment() {
 
             val hours = WebParser.GetHours(it)
             weatherAdapter.submitList(hours)
-
+            hoursLayoutManager.scrollToPositionWithOffset(
+                Calendar.getInstance().time.hours
+                ,
+                10)
         }
     }
+
+    private lateinit var hoursLayoutManager:LinearLayoutManager
     private fun initRC() = with(binding){
 
 
         weatherAdapter = HoursViewAdapter()
         rcView.adapter = weatherAdapter
-        rcView.layoutManager = LinearLayoutManager(activity)
+        hoursLayoutManager = LinearLayoutManager(activity)
+        rcView.layoutManager = hoursLayoutManager
 
 
 
