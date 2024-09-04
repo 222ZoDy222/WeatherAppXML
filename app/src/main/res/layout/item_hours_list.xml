@@ -13,26 +13,42 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/temperatureText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="24*C"
-            android:textColor="@color/white"
-            android:textSize="34sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView"
-            app:layout_constraintStart_toEndOf="@+id/timeText"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             android:id="@+id/timeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
+            android:gravity="center_horizontal|left"
+            android:maxWidth="100dp"
             android:text="22:00"
             android:textColor="@color/white"
             android:textSize="24sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/temperatureText"
+
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:maxLines="1"
+            android:text="24*/24*"
+
+            android:textSize="100sp"
+            app:autoSizeMaxTextSize="36sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="1sp"
+            app:autoSizeTextType="uniform"
+
+            android:ellipsize="none"
+            android:gravity="center"
+
+            android:textAlignment="center"
+            android:textColor="@color/white"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,8 +57,10 @@
             android:layout_width="104dp"
             android:layout_height="78dp"
 
+            android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

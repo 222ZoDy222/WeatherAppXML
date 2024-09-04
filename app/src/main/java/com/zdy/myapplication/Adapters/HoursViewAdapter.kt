@@ -12,16 +12,26 @@ import com.zdy.myapplication.databinding.ItemHoursListBinding
 
 class HoursViewAdapter : ListAdapter<DayWeather, HoursViewAdapter.HoursViewHolder>(Comporator()) {
 
+    public var isHours = true
 
     class HoursViewHolder(
         val binding : ItemHoursListBinding
     ) : RecyclerView.ViewHolder(binding.root)
     {
 
-        fun Init(dayWeather: DayWeather) = with(binding){
-            timeText.text = dayWeather.time.split(" ")[1]
-            temperatureText.text = dayWeather.currentTemp
-            Picasso.get().load("https:" + dayWeather.imageURL).into(imageView)
+        fun Init(dayWeather: DayWeather, isHours: Boolean) = with(binding){
+
+            if(isHours){
+                timeText.text = dayWeather.time.split(" ")[1]
+                temperatureText.text = dayWeather.currentTemp
+                Picasso.get().load("https:" + dayWeather.imageURL).into(imageView)
+            } else{
+
+                var date = dayWeather.time.split("-")
+                timeText.text = "${date[2]}.${date[1]}"
+                temperatureText.text = "${dayWeather.minTemp}/${dayWeather.maxTemp}"
+                Picasso.get().load("https:" + dayWeather.imageURL).into(imageView)
+            }
 
         }
 
@@ -46,7 +56,8 @@ class HoursViewAdapter : ListAdapter<DayWeather, HoursViewAdapter.HoursViewHolde
     }
 
     override fun onBindViewHolder(holder: HoursViewHolder, position: Int) {
-        holder.Init(getItem(position))
+        holder.Init(getItem(position),isHours)
+
     }
 
 }
