@@ -10,17 +10,26 @@ import com.squareup.picasso.Picasso
 import com.zdy.myapplication.DataClasses.DayWeather
 import com.zdy.myapplication.databinding.ItemHoursListBinding
 
-class HoursViewAdapter : ListAdapter<DayWeather, HoursViewAdapter.HoursViewHolder>(Comporator()) {
+class HoursViewAdapter(val listener: Listener? = null) : ListAdapter<DayWeather, HoursViewAdapter.HoursViewHolder>(Comporator()) {
 
     public var isHours = true
 
     class HoursViewHolder(
-        val binding : ItemHoursListBinding
+        val binding : ItemHoursListBinding,val listener: Listener?
     ) : RecyclerView.ViewHolder(binding.root)
     {
+        var itemTemp : DayWeather? = null
+        init {
+            itemView.setOnClickListener{
+                itemTemp?.let {
+                    listener?.onClick(it)
+                }
+            }
+        }
 
         fun Init(dayWeather: DayWeather, isHours: Boolean) = with(binding){
 
+            itemTemp = dayWeather
             if(isHours){
                 timeText.text = dayWeather.time.split(" ")[1]
                 temperatureText.text = dayWeather.currentTemp
@@ -52,12 +61,20 @@ class HoursViewAdapter : ListAdapter<DayWeather, HoursViewAdapter.HoursViewHolde
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemHoursListBinding.inflate(inflater,parent,false)
 
-        return HoursViewHolder(binding)
+        return HoursViewHolder(binding,listener)
     }
 
     override fun onBindViewHolder(holder: HoursViewHolder, position: Int) {
         holder.Init(getItem(position),isHours)
 
     }
+
+
+    interface Listener{
+        fun onClick(item: DayWeather){
+
+        }
+    }
+
 
 }

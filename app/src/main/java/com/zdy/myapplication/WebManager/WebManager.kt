@@ -11,7 +11,7 @@ class WebManager {
 
 
 
-    private val API_KEY = "c541682d629944e7b45153031242108"
+    private val API_KEY = ""
     public val DAYS_COUNT = 3
 
     public fun GetWeather(city: String, context: Context ,callback: (result: String?) -> Unit){

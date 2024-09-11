@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zdy.myapplication.Adapters.HoursViewAdapter
+import com.zdy.myapplication.DataClasses.DayWeather
 import com.zdy.myapplication.MainViewModel
 import com.zdy.myapplication.R
 import com.zdy.myapplication.WebManager.WebParser
@@ -15,7 +16,7 @@ import com.zdy.myapplication.databinding.FragmentDaysBinding
 import java.util.Calendar
 
 
-class DaysFragment : Fragment() {
+class DaysFragment : Fragment(), HoursViewAdapter.Listener {
 
 
     private lateinit var binding : FragmentDaysBinding
@@ -47,7 +48,7 @@ class DaysFragment : Fragment() {
     private fun AddListener(){
         model.temperatureList.observe(viewLifecycleOwner){
 
-            weatherAdapter.submitList(it.subList(1,it.size))
+            weatherAdapter.submitList(it)
             hoursLayoutManager.scrollToPositionWithOffset(
                 Calendar.getInstance().time.hours
                 ,
@@ -58,7 +59,9 @@ class DaysFragment : Fragment() {
     private lateinit var hoursLayoutManager:LinearLayoutManager
     private fun initRC() = with(binding){
 
-        weatherAdapter = HoursViewAdapter()
+        weatherAdapter = HoursViewAdapter(
+            this@DaysFragment
+        )
         weatherAdapter.isHours = false
         rcView.adapter = weatherAdapter
         hoursLayoutManager = LinearLayoutManager(activity)
@@ -72,5 +75,9 @@ class DaysFragment : Fragment() {
         @JvmStatic
         fun newInstance() =
             DaysFragment()
+    }
+
+    override fun onClick(item: DayWeather) {
+        model.selectedTemperature.value = item
     }
 }
